@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org">
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+	
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Countries List</title>
+	</head>
+	
+	<body>
+		<h1>Countries</h1>
+		
+		<div class="container shadow-4 rounded-5 overflow-hidden mb-0">
+			<table class="table table-stripped table-hover">
+				<thead class="thead-dark">
+					<tr>
+						<th>ID</th>
+						<th>Nimi</th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				
+				<tbody>
+					<tr th:each="country: ${countries}" th:object="${country}" class="table table-bordered">
+						<td th:text="*{id}">
+						<td th:text="*{name}">
+						<td>
+							<a th:href="@{/movies/country/{country}(country=*{name})}" class="btn btn-info">
+							<label th:text="'Movies from ' + *{name}"></label>
+							</a>
+						</td>
+						<td>
+							<a th:href="@{deletecountry/{id}(id=*{id})}" class="btn btn-danger">
+							Delete
+							</a>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<div class="container">
+		    <a href="/addcountry" class="btn btn-success">Add a new country</a>
+			<a href="/movies" class="btn btn-primary">Back to movies</a>
+		</div>
+	</body>
+</html>

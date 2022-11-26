@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+        
+        <title>List of movies</title>
+    </head>
+    <body>
+    	<h1 th:text=${subject}></h1>
+        <div class="container shadow-4 rounded-5 overflow-hidden mb-0" >
+            <table class="table table-stripped table-hover">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Director</th>
+                        <th>Year of publication</th>
+                        <th>Link to TMDB</th>
+                        <th>Country</th>
+                        <th>Genre</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="movie: ${movies}"  th:object="${movie}" class="table table-bordered">
+                        <td th:text="*{id}"></td>
+                        <td th:text="*{title}"></td>
+                        <td th:text="*{director}"></td>
+                        <td><a class="btn btn-link"
+                        	th:text="*{publishYear?.name}"
+                        	th:href="@{/movies/publishyear/{publishYear}(publishYear=*{publishYear?.name})}">
+                        </a></td>
+                        <td><a
+                        	th:text="Link"
+                        	th:href="*{tmdb}" th:target="_blank" class="btn btn-link">
+                        </a></td>
+                        <td><a class="btn btn-link"
+                        	th:text="*{country?.name}"
+                        	th:href="@{/movies/country/{country}(country=*{country?.name})}">
+                        </a></td>
+                        
+                        <td><a class="btn btn-link"
+                        	th:text="*{genre?.name}"
+                        	th:href="@{/movies/genre/{genre}(genre=*{genre?.name})}">
+                        </a></td>
+                        <td>
+                            <a
+                                th:href="@{/edit/{id}(id=*{id})}" class="btn btn-primary"
+                                >edit</a
+                            >
+                        </td>
+                        
+                        <td> <!-- Different endpoint for different redirect after delete  -->
+                            <a th:href="${genre} ? @{/movies/genre/{genre}/delete/{id}(genre=*{genre.name},id=*{id})} : @{/delete/{id}(id=*{id})} "
+                            	class="btn btn-danger"
+                                >Delete</a
+                            >
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h4 th:if="${movies.isEmpty()}">No movies</h4>
+        </div>
+		<div class="container">
+        	<a href="/add" class="btn btn-success">Add a new movie</a>
+        	<a href="/genres" class="btn btn-info">Genres</a>
+        	<a href="/countries" class="btn btn-info">Countries</a>
+			<a th:if="${genre}" href="/movies" class="btn btn-primary">Back to movies</a>
+			<a th:if="${country}" href="/movies" class="btn btn-primary">Back to movies</a>
+        </div>
+    </body>
+</html>

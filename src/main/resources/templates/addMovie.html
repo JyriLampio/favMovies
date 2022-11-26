@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+	<html xmlns:th="http://www.thymeleaf.org" lang="en">
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+	
+	<head>
+    	<meta charset="UTF-8">
+    	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    	<title>Adding a movie to database</title>
+	</head>
+	<style>
+label {
+  cursor: zoom-in;
+}
+	</style>
+
+	
+	<body>
+    	<h1 th:text=${subject}></h1>
+    	<form th:object="${movie}" th:action="@{/save}" action="#" method="post">
+		 
+        	<label for="title">Title of the movie: </label> 
+        	<input type="text" id="title" th:field="*{title}" th:required="required" class="btn btn-dark"/>
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+        	<label for="director">Who is the director: </label> 
+        	<input type="text" id="director" th:field="*{director}" th:required="required" class="btn btn-dark"/>
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+        	<label for="year">Which year was it published: </label> 
+        	<select th:field="*{publishYear.id}" class="btn btn-primary">
+        		<option th:each="year : ${years}" th:value="${year.id}" th:text="${year.name}"></option>
+        	</select>
+        	
+        	
+        	<div style="clear: both; display: block; height: 10px;"></div>
+        	<label for="tmdb" >Paste the link to TMDB: </label> 
+        	<input type="text" id="tmdb" th:field="*{tmdb}" class="btn btn-dark"/>
+        	
+        	
+        	<div style="clear: both; display: block; height: 10px;"></div>
+        	<label for="country">Which country is the movie from: </label> 
+        	<select th:field="*{country.id}" class="btn btn-primary">
+        		<option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"></option>
+        	</select>
+        	
+			<div style="clear: both; display: block; height: 10px;"></div>
+        	<label for="genre">Please choose the genre of the movie: </label>
+        	<select th:field="*{genre.id}" class="btn btn-primary">
+        		<option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+        	</select>
+        
+
+			<div style="clear: both; display: block; height: 10px;"></div>
+        	<input type="submit" value="Save" class="btn btn-info"/>
+        	<a href="/movies" class="btn btn-secondary">Return</a>
+    	</form>
+	</body>
+</html>
