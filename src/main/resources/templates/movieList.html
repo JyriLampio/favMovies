@@ -18,7 +18,6 @@
             <table class="table table-stripped table-hover">
                 <thead class="thead-dark">
                     <tr>
-                        <th>ID</th>
                         <th>Title</th>
                         <th>Director</th>
                         <th>Year of publication</th>
@@ -31,12 +30,11 @@
                 </thead>
                 <tbody>
                     <tr th:each="movie: ${movies}"  th:object="${movie}" class="table table-bordered">
-                        <td th:text="*{id}"></td>
                         <td th:text="*{title}"></td>
                         <td th:text="*{director}"></td>
                         <td><a class="btn btn-link"
                         	th:text="*{publishYear?.name}"
-                        	th:href="@{/movies/publishyear/{publishYear}(publishYear=*{publishYear?.name})}">
+                        	th:href="@{/movies/publishyear/{publishYear}(publishYear=*{publishYear?.id})}">
                         </a></td>
                         <td><a
                         	th:text="Link"
@@ -44,12 +42,12 @@
                         </a></td>
                         <td><a class="btn btn-link"
                         	th:text="*{country?.name}"
-                        	th:href="@{/movies/country/{country}(country=*{country?.name})}">
+                        	th:href="@{/movies/country/{country}(country=*{country?.id})}">
                         </a></td>
                         
                         <td><a class="btn btn-link"
                         	th:text="*{genre?.name}"
-                        	th:href="@{/movies/genre/{genre}(genre=*{genre?.name})}">
+                        	th:href="@{/movies/genre/{genre}(genre=*{genre?.id})}">
                         </a></td>
                         <td>
                             <a
@@ -73,8 +71,10 @@
         	<a href="/add" class="btn btn-success">Add a new movie</a>
         	<a href="/genres" class="btn btn-info">Genres</a>
         	<a href="/countries" class="btn btn-info">Countries</a>
+        	<a href="/publishyears" class="btn btn-info">Years</a>
 			<a th:if="${genre}" href="/movies" class="btn btn-primary">Back to movies</a>
 			<a th:if="${country}" href="/movies" class="btn btn-primary">Back to movies</a>
+			<a th:if="${publishYear}" href="/movies" class="btn btn-primary">Back to movies</a>
         </div>
     </body>
 </html>

@@ -19,8 +19,7 @@
 			<table class="table table-stripped table-hover">
 				<thead class="thead-dark">
 					<tr>
-						<th>ID</th>
-						<th>Nimi</th>
+						<th>Name of the Genre</th>
 						<th></th>
 						<th></th>
 					</tr>
@@ -28,10 +27,9 @@
 				
 				<tbody>
 					<tr th:each="genre: ${genres}" th:object="${genre}" class="table table-bordered">
-						<td th:text="*{id}">
 						<td th:text="*{name}">
 						<td>
-							<a th:href="@{/movies/{genre}(genre=*{name})}" class="btn btn-info">
+							<a th:href="@{/movies/genre/{genre}(genre=*{id})}" class="btn btn-info">
 							Movies in this genre
 							</a>
 						</td>

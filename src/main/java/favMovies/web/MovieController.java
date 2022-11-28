@@ -55,30 +55,33 @@ public class MovieController {
 	}
 
 	// Show a page with all movies sorted by specific genre
-	@GetMapping("/movies/genre/{genre}")
-	public String returnMoviesByGenre(@PathVariable("genre") String name, Model model) {
-		String subject = name + " movies";
+	@GetMapping("/movies/genre/{id}")
+	public String returnMoviesByGenre(@PathVariable("id") long id, Model model) {
+		String genreName = genreRepo.findById(id).getName();
+		String subject = genreName + " movies";
 		model.addAttribute("subject", subject);
-		model.addAttribute("movies", genreRepo.findByName(name).getMovies());
+		model.addAttribute("movies", genreRepo.findById(id).getMovies());
 		return "movieList";
 	}
 	
 	// Show a page with all movies sorted by specific country
-	@GetMapping("/movies/country/{country}")
-	public String returnMoviesByCountry(@PathVariable("country") String name, Model model) {
-		String subject = "Movies from " + name;
+	@GetMapping("/movies/country/{id}")
+	public String returnMoviesByCountry(@PathVariable("id") long id, Model model) {
+		String countryName = countryRepo.findById(id).getName();
+		String subject = "Movies from " + countryName;
 		model.addAttribute("subject", subject);
 		//model.addAttribute("country", name);
-		model.addAttribute("movies", countryRepo.findByName(name).getMovies());
+		model.addAttribute("movies", countryRepo.findById(id).getMovies());
 		return "movieList";
 	}
 	
 	// Show a page with all movies sorted by specific genre
-	@GetMapping("/movies/publishyear/{publishyear}")
-	public String returnMoviesByYear(@PathVariable("publishyear") int name, Model model) {
-		String subject = "Movies from " + name;
+	@GetMapping("/movies/publishyear/{id}")
+	public String returnMoviesByYear(@PathVariable("id") long id, Model model) {
+		int year = publishYearRepo.findById(id).getName();
+		String subject = "Movies from " + year;
 		model.addAttribute("subject", subject);
-		model.addAttribute("movies", publishYearRepo.findByName(name).getMovies());
+		model.addAttribute("movies", publishYearRepo.findById(id).getMovies());
 		return "movieList";
 	}
 	
@@ -119,11 +122,16 @@ public class MovieController {
 	// Edit a movie by id.
 	@GetMapping("/edit/{id}")
 	public String editMovie(@PathVariable("id") Long id, Model model) {
-		Optional<Movie> movie = movieRepo.findById(id);
+		String movieName = movieRepo.findById(id).get().getTitle();
+		Movie movie = movieRepo.findById(id).get();
 		List<Genre> genres = (List<Genre>) genreRepo.findAll();
-		String subject = "Edit a movie";
-		model.addAttribute("genres", genres);
+		List<Country> countries = (List<Country>) countryRepo.findAll();
+		List<PublishYear> years = (List<PublishYear>) publishYearRepo.findAll();
+		String subject = "Edit " + movieName;
 		model.addAttribute("movie", movie);
+		model.addAttribute("genres", genres);
+		model.addAttribute("countries", countries);
+		model.addAttribute("years", years);
 		model.addAttribute("subject", subject);
 		return "editMovie";
 	}
@@ -149,6 +157,7 @@ public class MovieController {
 		}
 	}
 
+	/*
 	// REST below
 
 	@RequestMapping("api/movies")
@@ -226,6 +235,6 @@ public class MovieController {
 		}
 	}
 	
-	
+	*/
 
 }

@@ -9,32 +9,32 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Countries List</title>
+		<title>Year List</title>
 	</head>
 	
 	<body>
-		<h1>Countries</h1>
+		<h1>Movies from Different years</h1>
 		
 		<div class="container shadow-4 rounded-5 overflow-hidden mb-0">
 			<table class="table table-stripped table-hover">
 				<thead class="thead-dark">
 					<tr>
-						<th>Name of the Country</th>
+						<th>Year</th>
 						<th></th>
 						<th></th>
 					</tr>
 				</thead>
 				
 				<tbody>
-					<tr th:each="country: ${countries}" th:object="${country}" class="table table-bordered">
+					<tr th:each="publishyear: ${publishyears}" th:object="${publishyear}" class="table table-bordered">
 						<td th:text="*{name}">
 						<td>
-							<a th:href="@{/movies/country/{country}(country=*{id})}" class="btn btn-info">
+							<a th:href="@{/movies/publishyear/{publishyear}(publishyear=*{id})}" class="btn btn-info">
 							<label th:text="'Movies from ' + *{name}"></label>
 							</a>
 						</td>
 						<td>
-							<a th:href="@{deletecountry/{id}(id=*{id})}" class="btn btn-danger">
+							<a th:href="@{deletegenre/{id}(id=*{id})}" class="btn btn-danger">
 							Delete
 							</a>
 					</tr>
@@ -43,7 +43,6 @@
 		</div>
 		
 		<div class="container">
-		    <a href="/addcountry" class="btn btn-success">Add a new country</a>
 			<a href="/movies" class="btn btn-primary">Back to movies</a>
 		</div>
 	</body>
