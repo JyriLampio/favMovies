@@ -1,5 +1,6 @@
 package favMovies.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,9 @@ public class Movie {
 	// @Column annotation can be used to specify mapped column. Example:
 	// @Column(name=”title_name”)
 	private String title;
-	private String director;
+	
+	@Column(columnDefinition="TEXT", length = 2048)
+	private String overview;
 	
 	@ManyToOne
 	@JoinColumn(name = "publishYearid")
@@ -25,8 +28,8 @@ public class Movie {
 	private String tmdb;
 	
 	@ManyToOne
-	@JoinColumn(name = "countryid")
-	private Country country;
+	@JoinColumn(name = "languageid")
+	private Language language;
 
 	@ManyToOne
 	@JoinColumn(name = "genreid")
@@ -35,13 +38,13 @@ public class Movie {
 	public Movie() {
 	};
 
-	public Movie(String title, String director, PublishYear publishYear, String tmdb, Country country,
+	public Movie(String title, String overview, PublishYear publishYear, String tmdb, Language language,
 			Genre genre) {
 		this.title = title;
-		this.director = director;
+		this.overview = overview;
 		this.publishYear = publishYear;
 		this.tmdb = tmdb;
-		this.country = country;
+		this.language = language;
 		this.genre = genre;
 
 	}
@@ -54,12 +57,12 @@ public class Movie {
 		this.title = title;
 	}
 
-	public String getDirector() {
-		return director;
+	public String getOverview() {
+		return overview;
 	}
 
-	public void setDirector(String director) {
-		this.director = director;
+	public void setOverview(String overview) {
+		this.overview = overview;
 	}
 
 	public PublishYear getPublishYear() {
@@ -78,12 +81,12 @@ public class Movie {
 		this.tmdb = tmdb;
 	}
 
-	public Country getCountry() {
-		return country;
+	public Language getLanguage() {
+		return language;
 	}
 
-	public void setCountry(Country country) {
-		this.country = country;
+	public void setLanguage(Language language) {
+		this.language = language;
 	}
 
 	public Long getId() {

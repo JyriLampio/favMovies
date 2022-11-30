@@ -28,7 +28,7 @@ label {
 
 			<div style="clear: both; display: block; height: 10px;"></div>
         	<label for="director">Who is the director: </label> 
-        	<input type="text" id="director" th:field="*{director}" th:required="required" class="btn btn-dark"/>
+        	<input type="text" id="overview" th:field="*{overview}" th:required="required" class="btn btn-dark"/>
 
 			<div style="clear: both; display: block; height: 10px;"></div>
         	<label for="year">Which year was it published: </label> 
@@ -44,8 +44,8 @@ label {
         	
         	<div style="clear: both; display: block; height: 10px;"></div>
         	<label for="country">Which country is the movie from: </label> 
-        	<select th:field="*{country.id}" class="btn btn-primary">
-        		<option th:each="country : ${countries}" th:value="${country.id}" th:text="${country.name}"></option>
+        	<select th:field="*{language.id}" class="btn btn-primary">
+        		<option th:each="language : ${languages}" th:value="${language.id}" th:text="${language.name}"></option>
         	</select>
         	
 			<div style="clear: both; display: block; height: 10px;"></div>

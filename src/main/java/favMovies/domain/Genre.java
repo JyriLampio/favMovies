@@ -15,6 +15,7 @@ public class Genre {
 	@Id
 	@GeneratedValue
 	private long id;
+	private int tmdbid;
 	private String name;
 
 	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "genre")
@@ -23,8 +24,9 @@ public class Genre {
 	public Genre() {
 	};
 
-	public Genre(String name) {
+	public Genre(int tmdbid, String name) {
 		this.name = name;
+		this.tmdbid = tmdbid;
 	}
 
 	public String getName() {
@@ -53,6 +55,14 @@ public class Genre {
 	@PreRemove
 	private void preRemove() {
 		movies.forEach(movie -> movie.setGenre(null));
+	}
+
+	public long getTmdbid() {
+		return tmdbid;
+	}
+
+	public void setTmdbid(int tmdbid) {
+		this.tmdbid = tmdbid;
 	}
 
 }

@@ -11,20 +11,20 @@ import javax.persistence.OneToMany;
 import javax.persistence.PreRemove;
 
 @Entity
-public class Country {
+public class Language {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	private String name;
 
-	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "country")
+	@OneToMany(cascade = CascadeType.PERSIST, mappedBy = "language")
 	private List<Movie> movies;
 
-	public Country() {
+	public Language() {
 	};
 
-	public Country(String name) {
+	public Language(String name) {
 		this.name = name;
 	}
 
@@ -53,7 +53,6 @@ public class Country {
 
 	@PreRemove
 	private void preRemove() {
-		movies.forEach(movie -> movie.setCountry(null));
+		movies.forEach(movie -> movie.setLanguage(null));
 	}
-
 }

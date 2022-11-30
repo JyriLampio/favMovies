@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import favMovies.domain.Country;
-import favMovies.domain.CountryRepo;
 import favMovies.domain.Genre;
 import favMovies.domain.GenreRepo;
+import favMovies.domain.Language;
+import favMovies.domain.LanguageRepo;
 import favMovies.domain.Movie;
 import favMovies.domain.MovieRepo;
 import favMovies.domain.PublishYear;
@@ -35,7 +35,7 @@ public class MovieController {
 	@Autowired
 	private GenreRepo genreRepo;
 	@Autowired
-	private CountryRepo countryRepo;
+	private LanguageRepo languageRepo;
 	@Autowired
 	private PublishYearRepo publishYearRepo;
 
@@ -67,11 +67,11 @@ public class MovieController {
 	// Show a page with all movies sorted by specific country
 	@GetMapping("/movies/country/{id}")
 	public String returnMoviesByCountry(@PathVariable("id") long id, Model model) {
-		String countryName = countryRepo.findById(id).getName();
+		String countryName = languageRepo.findById(id).getName();
 		String subject = "Movies from " + countryName;
 		model.addAttribute("subject", subject);
 		//model.addAttribute("country", name);
-		model.addAttribute("movies", countryRepo.findById(id).getMovies());
+		model.addAttribute("movies", languageRepo.findById(id).getMovies());
 		return "movieList";
 	}
 	
@@ -90,21 +90,21 @@ public class MovieController {
 	public String addMovie(Model model) {
 		String subject = "Add a movie";
 		List<Genre> genres = (List<Genre>) genreRepo.findAll();
-		List<Country> countries = (List<Country>) countryRepo.findAll();
+		List<Language> countries = (List<Language>) languageRepo.findAll();
 		List<PublishYear> years = (List<PublishYear>) publishYearRepo.findAll();
 		model.addAttribute("subject", subject);
 		model.addAttribute("movie", new Movie());
 		model.addAttribute("countries", countries);
 		model.addAttribute("genres", genres);
 		model.addAttribute("years", years);
-		return "addMovie";
+		return "addMovieLink";
 	}
 
 	// Save a new movie.
 	@PostMapping("/save")
 	public String saveMovie(Movie movie) {
 		try {
-			if (movie.getDirector() == null) {
+			if (movie.getTitle() == null) {
 				System.out.println("Failed, price too small");
 				return "redirect:add";
 			} else {
@@ -125,12 +125,12 @@ public class MovieController {
 		String movieName = movieRepo.findById(id).get().getTitle();
 		Movie movie = movieRepo.findById(id).get();
 		List<Genre> genres = (List<Genre>) genreRepo.findAll();
-		List<Country> countries = (List<Country>) countryRepo.findAll();
+		List<Language> languages = (List<Language>) languageRepo.findAll();
 		List<PublishYear> years = (List<PublishYear>) publishYearRepo.findAll();
 		String subject = "Edit " + movieName;
 		model.addAttribute("movie", movie);
 		model.addAttribute("genres", genres);
-		model.addAttribute("countries", countries);
+		model.addAttribute("languages", languages);
 		model.addAttribute("years", years);
 		model.addAttribute("subject", subject);
 		return "editMovie";

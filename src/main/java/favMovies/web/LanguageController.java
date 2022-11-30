@@ -15,35 +15,35 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import favMovies.domain.Country;
-import favMovies.domain.CountryRepo;
+import favMovies.domain.Language;
+import favMovies.domain.LanguageRepo;
 
 @CrossOrigin
 @Controller
-public class CountryController {
+public class LanguageController {
 	
 	@Autowired
-	private CountryRepo countryRepo;
+	private LanguageRepo languageRepo;
 
 	// Show a page with all countries
 	@GetMapping("countries")
 	public String countryList(Model model) {
-		model.addAttribute("countries", countryRepo.findAll());
+		model.addAttribute("countries", languageRepo.findAll());
 		return "countryList";
 	}
 	
 	// Add a country
 	@GetMapping("/addcountry")
 	public String addCountry(Model model) {
-		model.addAttribute("country", new Country());
+		model.addAttribute("country", new Language());
 		return "addCountry";
 	}
 	
 	// Save new manufacturer
 	@PostMapping("/savecountry")
-	public String saveCountry(Country country) {
+	public String saveCountry(Language country) {
 		try {
-			countryRepo.save(country);
+			languageRepo.save(country);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
@@ -53,16 +53,16 @@ public class CountryController {
 	// Delete manufacturer in web page
 	@GetMapping("/deletecountry/{id}")
 	public String deleteCountry(@PathVariable("id") Long id, Model model) {
-		countryRepo.deleteById(id);
+		languageRepo.deleteById(id);
 		return "redirect:../countries";
 	}
 	
 	//REST
 	
 	@PostMapping("api/countries")
-	public ResponseEntity<Country> postCountry(@RequestBody Country country){
+	public ResponseEntity<Language> postCountry(@RequestBody Language country){
 		try {
-			return ResponseEntity.status(203).body(countryRepo.save(country));
+			return ResponseEntity.status(203).body(languageRepo.save(country));
 		}catch(Exception e) {
 			return ResponseEntity.status(500).build();
 		}
@@ -70,9 +70,9 @@ public class CountryController {
 	
 	
 	@GetMapping("api/countries")
-	public ResponseEntity<List<Country>> getAllcountries(){
+	public ResponseEntity<List<Language>> getAllcountries(){
 		try {
-			List<Country> countries = (java.util.List<Country>) countryRepo.findAll();
+			List<Language> countries = (java.util.List<Language>) languageRepo.findAll();
 			return ResponseEntity.ok().body(countries);			
 		}catch(Exception e) {
 			return ResponseEntity.status(500).build();			
@@ -80,9 +80,9 @@ public class CountryController {
 	}
 	
 	@GetMapping("api/countries/{id}")
-	public ResponseEntity<Optional<Country>> getCountry(@PathVariable Long id){
+	public ResponseEntity<Optional<Language>> getCountry(@PathVariable Long id){
 		try {
-			Optional<Country> country = countryRepo.findById(id);
+			Optional<Language> country = languageRepo.findById(id);
 			return ResponseEntity.ok().body(country);				
 		}catch(Exception e) {
 			return ResponseEntity.status(500).build();
@@ -90,13 +90,13 @@ public class CountryController {
 	}
 	
 	@DeleteMapping("api/countries/{id}")
-	public ResponseEntity<Optional<Country>> deleteCountry(@PathVariable Long id){
+	public ResponseEntity<Optional<Language>> deleteCountry(@PathVariable Long id){
 		try {
-			Optional<Country> country =  countryRepo.findById(id);
+			Optional<Language> country =  languageRepo.findById(id);
 			if(country.isEmpty()) {
 				return ResponseEntity.ok().build();
 			}
-			countryRepo.deleteById(id);		
+			languageRepo.deleteById(id);		
 			return ResponseEntity.status(204).body(country); 		
 		}catch(Exception e) {
 			return ResponseEntity.status(500).build();			
@@ -104,8 +104,8 @@ public class CountryController {
 	}
 	
 	@PutMapping("api/countries/{id}")
-	public ResponseEntity<Country> updateCountry(@RequestBody Country countryUpdated, @PathVariable Long id){
-		Optional<Country> country = countryRepo.findById(id);
+	public ResponseEntity<Language> updateCountry(@RequestBody Language countryUpdated, @PathVariable Long id){
+		Optional<Language> country = languageRepo.findById(id);
 		try {
 			if(country.isEmpty()) {
 				return ResponseEntity.status(400).build();
