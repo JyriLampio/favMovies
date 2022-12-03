@@ -168,7 +168,7 @@ public class MovieController {
 		}
 		if (title == "1") {
 			 String foundDuplicate = "Movie is already on the list";
-		     redirectAttributes.addFlashAttribute("confirmation", foundDuplicate);
+		     redirectAttributes.addFlashAttribute("duplicate", foundDuplicate);
 		     return "redirect:movies";
 		}
 		else {

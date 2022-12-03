@@ -48,8 +48,8 @@ public class FavMoviesApplication {
 
 			String useless = geerr.addInitialGenres(genreRepo);
 			String useless2 = geerr.addInitialMovies(movieRepo, languageRepo, genreRepo, publishYearRepo);
-			applicationUserRepo.save(new ApplicationUser("useri", "Poju", "USER", "user", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
-			applicationUserRepo.save(new ApplicationUser("admini", "Poju", "ADMIN", "admin", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
+			applicationUserRepo.save(new ApplicationUser("Jaakko", "Pavunvarsi", "USER", "Jaakko91", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
+			applicationUserRepo.save(new ApplicationUser("Jonna", "Pajunvarsi", "ADMIN", "Jonna92", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
 		};
 	}
 }

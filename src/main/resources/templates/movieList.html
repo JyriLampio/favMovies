@@ -19,8 +19,30 @@ b {
 	color: #0056b3;
 }
 
-h3 {
+p {
+	text-align: center;
+}
+div {
+	text-align: center;
+}
+
+div.signout {
+	text-align: center;
+	padding: 5px;
+}
+
+form {
+	text-align: center;
+}
+
+p.confirm {
 	color: #28a745;
+	font-size: 200%;
+}
+
+p.duplicate {
+	color: #dc3545;
+	font-size: 200%;
 }
 </style>
 
@@ -33,23 +55,28 @@ h3 {
 </head>
 <body>
 	<h1 th:text=${subject}></h1>
+	<div sec:authorize="isAuthenticated()"></div>
+	<p>
+		Hello <b><span sec:authentication="name"> </span></b>.
+	</p>
+	<div sec:authorize="hasAuthority('USER')">You have <b>USER</b> access.</div>
+	<div sec:authorize="hasAuthority('ADMIN')">You have <b>ADMIN</b> access.</div>
 
-	<h2>
-
-		<div sec:authorize="isAuthenticated()">
-			You have <b><span sec:authentication="name"> </span></b> access
-		</div>
-	</h2>
-	<h3 th:text="${confirmation}"></h3>
+	<form th:action="@{/logout}" method="post">
+		<div class="signout"><input type="submit" value="Sign Out" class="btn btn-primary"></div>
+	</form>
+	<!-- h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1> Toinen tapa saada rooli näkyviin.-->
+	<p class="confirm" th:text="${confirmation}">
+	<p class="duplicate" th:text="${duplicate}">
+	
 	<div class="buttoncontainer">
-		<a href="/add" class="btn btn-success">Add a new movie</a> <a
-			href="/genres" class="btn btn-info">Genres</a> <a href="/countries"
-			class="btn btn-info">Countries</a> <a href="/publishyears"
-			class="btn btn-info">Years</a> <a th:if="${genre}" href="/movies"
-			class="btn btn-primary">Back to movies</a> <a th:if="${language}"
-			href="/movies" class="btn btn-primary">Back to movies</a> <a
-			th:if="${publishYear}" href="/movies" class="btn btn-primary">Back
-			to movies</a>
+		<a sec:authorize="hasAuthority('ADMIN')" href="/add" class="btn btn-success">Add a new movie</a> 
+		<a href="/genres" class="btn btn-info">Genres</a> 
+		<a href="languages" class="btn btn-info">Languages</a> 
+		<a href="/publishyears"	class="btn btn-info">Years</a> 
+		<a th:if="${genre}" href="/movies" class="btn btn-primary">Back to movies</a> 
+		<a th:if="${language}" href="/movies" class="btn btn-primary">Back to movies</a> 
+		<a th:if="${publishYear}" href="/movies" class="btn btn-primary">Back to movies </a>
 	</div>
 	<div class="container shadow-4 rounded-5 overflow-hidden mb-0">
 		<table class="table table-stripped table-hover">
@@ -73,7 +100,7 @@ h3 {
 					<td><a class="btn btn-link" th:text="*{publishYear?.name}"
 						th:href="@{/movies/publishyear/{publishYear} (publishYear=*{publishYear?.id})}">
 					</a></td>
-					<td><a th:text="tmdbId"
+					<td><a th:text="Link"
 						th:href="@{https://www.themoviedb.org/movie/{tmdbId} (tmdbId=*{tmdbId})}"
 						th:target="_blank" class="btn btn-link"> </a></td>
 					<td><a class="btn btn-link" th:text="*{language?.name}"
@@ -83,8 +110,7 @@ h3 {
 					<td><a class="btn btn-link" th:text="*{genre?.name}"
 						th:href="@{/movies/genre/{genre}(genre=*{genre?.id})}"> </a></td>
 					<td><a th:href="@{/edit/{id}(id=*{id})}"
-						class="btn btn-primary">edit</a>
-					</td>
+						class="btn btn-primary">edit</a></td>
 
 					<td sec:authorize="hasAuthority('ADMIN')">
 						<!-- Different endpoint for different redirect after delete  --> <a

@@ -26,35 +26,35 @@ public class LanguageController {
 	private LanguageRepo languageRepo;
 
 	// Show a page with all countries
-	@GetMapping("countries")
+	@GetMapping("languages")
 	public String countryList(Model model) {
 		model.addAttribute("countries", languageRepo.findAll());
-		return "countryList";
+		return "languageList";
 	}
 	
 	// Add a country
-	@GetMapping("/addcountry")
+	@GetMapping("/addlanguage")
 	public String addCountry(Model model) {
 		model.addAttribute("country", new Language());
-		return "addCountry";
+		return "addLanguage";
 	}
 	
 	// Save new manufacturer
-	@PostMapping("/savecountry")
+	@PostMapping("/saveLanguage")
 	public String saveCountry(Language country) {
 		try {
 			languageRepo.save(country);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
-		return "redirect:/countries";
+		return "redirect:/languages";
 	}
 	
 	// Delete manufacturer in web page
 	@GetMapping("/deletecountry/{id}")
 	public String deleteCountry(@PathVariable("id") Long id, Model model) {
 		languageRepo.deleteById(id);
-		return "redirect:../countries";
+		return "redirect:../languages";
 	}
 	
 	//REST
