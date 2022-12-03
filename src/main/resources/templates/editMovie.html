@@ -20,15 +20,15 @@ label {
 	
 	<body>
     	<h1 th:text=${subject}></h1>
-    	<form th:object="${movie}" th:action="@{/save}" action="#" method="post">
+    	<form th:object="${movie}" th:action="@{/saveedit}" action="#" method="post">
     		<label for="id"></label><input type="hidden" id="id" th:field="*{id}" readonly="readonly" />
 		 
         	<label for="title">Title of the movie: </label> 
         	<input type="text" id="title" th:field="*{title}" th:required="required" class="btn btn-dark"/>
 
 			<div style="clear: both; display: block; height: 10px;"></div>
-        	<label for="director">Who is the director: </label> 
-        	<input type="text" id="overview" th:field="*{overview}" th:required="required" class="btn btn-dark"/>
+        	<label for="overview">Brief plot of the movie: </label> 
+        	<textarea rows="8" id="overview" th:field="*{overview}" class="btn btn-dark"></textarea>
 
 			<div style="clear: both; display: block; height: 10px;"></div>
         	<label for="year">Which year was it published: </label> 

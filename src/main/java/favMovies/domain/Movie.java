@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 public class Movie {
@@ -14,10 +15,15 @@ public class Movie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	
+	
 	// @Column annotation can be used to specify mapped column. Example:
 	// @Column(name=”title_name”)
+	@NotEmpty(message = "Title cannot be empty.")
+	@Column(columnDefinition="TEXT", length = 2048)
 	private String title;
 	
+	@NotEmpty(message = "User's email cannot be empty.")
 	@Column(columnDefinition="TEXT", length = 2048)
 	private String overview;
 	

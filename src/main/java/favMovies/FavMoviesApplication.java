@@ -1,27 +1,19 @@
 package favMovies;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import favMovies.domain.ApiParser;
+import favMovies.domain.ApplicationUser;
+import favMovies.domain.ApplicationUserRepo;
 import favMovies.domain.Genre;
 import favMovies.domain.GenreRepo;
 import favMovies.domain.LanguageRepo;
@@ -32,8 +24,14 @@ import favMovies.domain.PublishYear;
 import favMovies.domain.PublishYearRepo;
 
 @SpringBootApplication
+@EnableConfigurationProperties
 public class FavMoviesApplication {
 	private static final Logger log = LoggerFactory.getLogger(FavMoviesApplication.class);
+	
+	ApiParser geerr = new ApiParser();
+	
+	@Autowired
+	ApplicationUserRepo applicationUserRepo;
 
 	public static void main(String[] args) {
 		SpringApplication.run(FavMoviesApplication.class, args);
@@ -43,9 +41,15 @@ public class FavMoviesApplication {
 	public CommandLineRunner movieDemoing(MovieRepo movieRepo, GenreRepo genreRepo, LanguageRepo languageRepo,
 			PublishYearRepo publishYearRepo) {
 		return (args) -> {
+			
+			for (int years = 1950; years <= 2019; years++) {
+				publishYearRepo.save(new PublishYear(years));
+			}
 
-			ApiParser.addGenres(genreRepo);
-			ApiParser.addMovies(movieRepo, languageRepo, genreRepo, publishYearRepo);
+			String useless = geerr.addInitialGenres(genreRepo);
+			String useless2 = geerr.addInitialMovies(movieRepo, languageRepo, genreRepo, publishYearRepo);
+			applicationUserRepo.save(new ApplicationUser("useri", "Poju", "USER", "user", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
+			applicationUserRepo.save(new ApplicationUser("admini", "Poju", "ADMIN", "admin", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
 		};
 	}
 }

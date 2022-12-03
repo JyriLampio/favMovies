@@ -1,11 +1,20 @@
 package favMovies.web;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +25,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import favMovies.domain.ApiParser;
+import favMovies.domain.ApplicationUser;
+import favMovies.domain.ApplicationUserRepo;
 import favMovies.domain.Genre;
 import favMovies.domain.GenreRepo;
 import favMovies.domain.Language;
@@ -26,9 +40,19 @@ import favMovies.domain.MovieRepo;
 import favMovies.domain.PublishYear;
 import favMovies.domain.PublishYearRepo;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@ConfigurationProperties
 @CrossOrigin
 @Controller
 public class MovieController {
+	
+	 @Value("${name}")
+	    private String names;
+	 
+	 public String getSecretKey() {
+		    return this.names;
+		}
 
 	@Autowired
 	private MovieRepo movieRepo;
@@ -38,17 +62,21 @@ public class MovieController {
 	private LanguageRepo languageRepo;
 	@Autowired
 	private PublishYearRepo publishYearRepo;
+	@Autowired
+	private ApplicationUserRepo applicationUserRepo;
+	
 
 	// Index page
 	@GetMapping("/")
 	public String indexPage(Model model) {
-		return "index";
+		return "movieList";
 	}
 
 	// Show a page with all movies
 	@GetMapping("/movies")
 	public String movieList(Model model) {
 		String subject = "All movies";
+
 		model.addAttribute("subject", subject);
 		model.addAttribute("movies", movieRepo.findAll());
 		return "movieList";
@@ -85,7 +113,7 @@ public class MovieController {
 		return "movieList";
 	}
 	
-	// Add new movie.
+	/*// Old code
 	@GetMapping("/add")
 	public String addMovie(Model model) {
 		String subject = "Add a movie";
@@ -97,11 +125,13 @@ public class MovieController {
 		model.addAttribute("countries", countries);
 		model.addAttribute("genres", genres);
 		model.addAttribute("years", years);
-		return "addMovieLink";
+		return "addMovie";
 	}
+	
 
+*/
 	// Save a new movie.
-	@PostMapping("/save")
+	@PostMapping("/saveedit")
 	public String saveMovie(Movie movie) {
 		try {
 			if (movie.getTitle() == null) {
@@ -118,6 +148,31 @@ public class MovieController {
 		}
 		return "redirect:movies";
 	}
+	
+	// Add new movie.
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@GetMapping("/add")
+	public String addMovie(Model model) {
+
+		return "addMovieLink";
+	}
+	
+	// Save a new movie.
+	@PreAuthorize("hasAuthority('ADMIN')")
+	@PostMapping("/save")
+	public String saveMovie(Model model, @RequestParam int movieId, RedirectAttributes redirectAttributes) throws IOException {
+		String title = ApiParser.AddMovie(movieRepo, languageRepo, genreRepo, publishYearRepo, movieId);
+		if (title == "0") {
+		     redirectAttributes.addFlashAttribute("error", "Check the movie ID");
+		     return "redirect:add";
+		}
+		else {
+			 String confirmation = "Added " + title;
+		     redirectAttributes.addFlashAttribute("confirmation", confirmation);
+		     return "redirect:movies";
+		}
+	}
+
 
 	// Edit a movie by id.
 	@GetMapping("/edit/{id}")

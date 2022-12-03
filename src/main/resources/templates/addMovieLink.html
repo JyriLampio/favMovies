@@ -6,30 +6,32 @@
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
 	
 	<head>
+	<style>
+	form	{
+		text-align:center
+	}
+	p {
+	  	color:#dc3545;
+	  	font-size: 19px;
+	}
+	</style>
     	<meta charset="UTF-8">
     	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     	<title>Adding a movie to database</title>
 	</head>
-	<style>
-label {
-  cursor: zoom-in;
-}
-	</style>
+
 
 	
 	<body>
-    	<h1 th:text=${subject}></h1>
-    	<form th:object="${movie}" th:action="@{/save}" action="#" method="post">        	
-        	
-        	<div style="clear: both; display: block; height: 10px;"></div>
-        	<label for="tmdb" >Paste the link to TMDB: </label> 
-        	<input type="text" id="tmdb" th:field="*{tmdb}" class="btn btn-dark"/>
-        
+    	<h1>Add a movie</h1>
+    	<form th:action="@{/save}"  method="post">
+   	    	<p th:text=${error}></p>
+			<input type="number" th:value="${movieId}" name="movieId" placeholder="Paste Movie ID:" th:required="required" class="btn btn-light"/>
 
 			<div style="clear: both; display: block; height: 10px;"></div>
         	<input type="submit" value="Save" class="btn btn-info"/>
         	<a href="/movies" class="btn btn-secondary">Return</a>
-    	</form>
+        	</form>
 	</body>
 </html>
