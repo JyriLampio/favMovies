@@ -1,101 +1,100 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" lang="en">
-<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	lang="en">
+<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"
+	th:href="@{/css/bootstrap.min.css}" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
-    <head>
-    <style>
-    table {
-    	text-align:center
-    }
-    b {
-    	color: #0056b3;
-    }
-        h3 {
-    	color: #28a745;
-    }
-    </style>
-    
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
-        
-        <title>List of movies</title>
-    </head>
-    <body>
-    	<h1 th:text=${subject}></h1>
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap"
+	rel="stylesheet">
+<head>
+<style>
+table {
+	text-align: center
+}
 
-    	<h2>
-    	
-    <div sec:authorize="isAuthenticated()">
-      You have <b><span sec:authentication="name"> </span></b> access
-      </div>
-      </h2>
-      <h3 th:text="${confirmation}"></h3>
-        <div class="container shadow-4 rounded-5 overflow-hidden mb-0" >
-            <table class="table table-stripped table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Title</th>
-                        <th>Overview</th>
-                        <th>Published in</th>
-                        <th>TMDB Link</th>
-                        <th>Language</th>
-                        <th>Genre</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="movie: ${movies}"  th:object="${movie}" class="table table-bordered">
-                        <td th:text="*{title}"></td>
-                        <td th:text="*{overview}"></td>
-                        <td><a class="btn btn-link"
-                        	th:text="*{publishYear?.name}"
-                        	th:href="@{/movies/publishyear/{publishYear}(publishYear=*{publishYear?.id})}">
-                        </a></td>
-                        <td><a
-                        	th:text="Link"
-                        	th:href="*{tmdb}" th:target="_blank" class="btn btn-link">
-                        </a></td>
-                        <td><a class="btn btn-link"
-                        	th:text="*{language?.name}"
-                        	th:href="@{/movies/country/{language}(language=*{language?.id})}">
-                        </a></td>
-                        
-                        <td><a class="btn btn-link"
-                        	th:text="*{genre?.name}"
-                        	th:href="@{/movies/genre/{genre}(genre=*{genre?.id})}">
-                        </a></td>
-                        <td>
-                            <a
-                                th:href="@{/edit/{id}(id=*{id})}" class="btn btn-primary"
-                                >edit</a
-                            >
-                        </td>
-                        
-                        <td sec:authorize="hasAuthority('ADMIN')"> <!-- Different endpoint for different redirect after delete  -->
-                            <a th:href="${genre} ? @{/movies/genre/{genre}/delete/{id}(genre=*{genre.name},id=*{id})} : @{/delete/{id}(id=*{id})} "
-                            	class="btn btn-danger"
-                                >Delete</a
-                            >
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <h4 th:if="${movies.isEmpty()}">No movies</h4>
-        </div>
-		<div class="buttoncontainer">
-        	<a href="/add" class="btn btn-success">Add a new movie</a>
-        	<a href="/genres" class="btn btn-info">Genres</a>
-        	<a href="/countries" class="btn btn-info">Countries</a>
-        	<a href="/publishyears" class="btn btn-info">Years</a>
-			<a th:if="${genre}" href="/movies" class="btn btn-primary">Back to movies</a>
-			<a th:if="${language}" href="/movies" class="btn btn-primary">Back to movies</a>
-			<a th:if="${publishYear}" href="/movies" class="btn btn-primary">Back to movies</a>
-        </div>
-    </body>
+b {
+	color: #0056b3;
+}
+
+h3 {
+	color: #28a745;
+}
+</style>
+
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+
+<title>List of movies</title>
+</head>
+<body>
+	<h1 th:text=${subject}></h1>
+
+	<h2>
+
+		<div sec:authorize="isAuthenticated()">
+			You have <b><span sec:authentication="name"> </span></b> access
+		</div>
+	</h2>
+	<h3 th:text="${confirmation}"></h3>
+	<div class="buttoncontainer">
+		<a href="/add" class="btn btn-success">Add a new movie</a> <a
+			href="/genres" class="btn btn-info">Genres</a> <a href="/countries"
+			class="btn btn-info">Countries</a> <a href="/publishyears"
+			class="btn btn-info">Years</a> <a th:if="${genre}" href="/movies"
+			class="btn btn-primary">Back to movies</a> <a th:if="${language}"
+			href="/movies" class="btn btn-primary">Back to movies</a> <a
+			th:if="${publishYear}" href="/movies" class="btn btn-primary">Back
+			to movies</a>
+	</div>
+	<div class="container shadow-4 rounded-5 overflow-hidden mb-0">
+		<table class="table table-stripped table-hover">
+			<thead class="thead-dark">
+				<tr>
+					<th>Title</th>
+					<th>Overview</th>
+					<th>Published in</th>
+					<th>TMDB Link</th>
+					<th>Language</th>
+					<th>Genre</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="movie: ${movies}" th:object="${movie}"
+					class="table table-bordered">
+					<td th:text="*{title}"></td>
+					<td th:text="*{overview}"></td>
+					<td><a class="btn btn-link" th:text="*{publishYear?.name}"
+						th:href="@{/movies/publishyear/{publishYear} (publishYear=*{publishYear?.id})}">
+					</a></td>
+					<td><a th:text="tmdbId"
+						th:href="@{https://www.themoviedb.org/movie/{tmdbId} (tmdbId=*{tmdbId})}"
+						th:target="_blank" class="btn btn-link"> </a></td>
+					<td><a class="btn btn-link" th:text="*{language?.name}"
+						th:href="@{/movies/country/{language}(language=*{language?.id})}">
+					</a></td>
+
+					<td><a class="btn btn-link" th:text="*{genre?.name}"
+						th:href="@{/movies/genre/{genre}(genre=*{genre?.id})}"> </a></td>
+					<td><a th:href="@{/edit/{id}(id=*{id})}"
+						class="btn btn-primary">edit</a>
+					</td>
+
+					<td sec:authorize="hasAuthority('ADMIN')">
+						<!-- Different endpoint for different redirect after delete  --> <a
+						th:href="${genre} ? @{/movies/genre/{genre}/delete/{id}(genre=*{genre.name},id=*{id})} : @{/delete/{id}(id=*{id})} "
+						class="btn btn-danger">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<h4 th:if="${movies.isEmpty()}">No movies</h4>
+	</div>
+</body>
 </html>

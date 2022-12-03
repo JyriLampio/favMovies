@@ -166,6 +166,11 @@ public class MovieController {
 		     redirectAttributes.addFlashAttribute("error", "Check the movie ID");
 		     return "redirect:add";
 		}
+		if (title == "1") {
+			 String foundDuplicate = "Movie is already on the list";
+		     redirectAttributes.addFlashAttribute("confirmation", foundDuplicate);
+		     return "redirect:movies";
+		}
 		else {
 			 String confirmation = "Added " + title;
 		     redirectAttributes.addFlashAttribute("confirmation", confirmation);

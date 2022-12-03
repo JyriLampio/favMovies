@@ -31,7 +31,7 @@ public class Movie {
 	@JoinColumn(name = "publishYearid")
 	private PublishYear publishYear;
 	
-	private String tmdb;
+	private int tmdbId;
 	
 	@ManyToOne
 	@JoinColumn(name = "languageid")
@@ -44,12 +44,12 @@ public class Movie {
 	public Movie() {
 	};
 
-	public Movie(String title, String overview, PublishYear publishYear, String tmdb, Language language,
+	public Movie(String title, String overview, PublishYear publishYear, int tmdbId, Language language,
 			Genre genre) {
 		this.title = title;
 		this.overview = overview;
 		this.publishYear = publishYear;
-		this.tmdb = tmdb;
+		this.tmdbId = tmdbId;
 		this.language = language;
 		this.genre = genre;
 
@@ -79,12 +79,12 @@ public class Movie {
 		this.publishYear = publishYear;
 	}
 
-	public String getTmdb() {
-		return tmdb;
+	public int getTmdbId() {
+		return tmdbId;
 	}
 
-	public void setTmdb(String tmdb) {
-		this.tmdb = tmdb;
+	public void setTmdbId(int tmdbId) {
+		this.tmdbId = tmdbId;
 	}
 
 	public Language getLanguage() {

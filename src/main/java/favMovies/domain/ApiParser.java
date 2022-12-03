@@ -41,9 +41,12 @@ public class ApiParser {
 		}
 		return line;
 	}
-	 String returnLink(int id) {
-		String url = "https://www.themoviedb.org/movie/" + id;
-		return url;		
+	public static boolean checkDuplicate(MovieRepo movieRepo, int tmdbId) {
+		Movie i = movieRepo.findByTmdbId(tmdbId);
+		if (i == null) {
+		return false;
+		}
+		return true;
 	}
 
 	// Adds sample movies to database
@@ -64,7 +67,7 @@ public class ApiParser {
 		for (int i = 0; i < jsonArray.size(); i++) {
 			String title = jsonArray.get(i).getAsJsonObject().get("title").getAsString();
 			String overview = jsonArray.get(i).getAsJsonObject().get("overview").getAsString();
-			String link =  returnLink(jsonArray.get(i).getAsJsonObject().get("id").getAsInt());
+			int tmdbId = jsonArray.get(i).getAsJsonObject().get("id").getAsInt();
 			String language = jsonArray.get(i).getAsJsonObject().get("original_language").getAsString().toUpperCase();
 			int genreId = jsonArray.get(i).getAsJsonObject().get("genre_ids").getAsJsonArray().get(0).getAsInt();
 			
@@ -76,7 +79,7 @@ public class ApiParser {
 			addLanguages(languageRepo, language);
 			addYears(publishYearRepo, year);
 			
-			movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), link, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
+			movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
 
 		}
 		return line;
@@ -99,7 +102,7 @@ public class ApiParser {
 
 			String title = gsonObj.getAsJsonObject().get("title").getAsString();
 			String overview = gsonObj.getAsJsonObject().get("overview").getAsString();
-			String link =  "https://www.themoviedb.org/movie/" + gsonObj.getAsJsonObject().get("id").getAsString();
+			int tmdbId = gsonObj.getAsJsonObject().get("id").getAsInt();
 			String language = gsonObj.getAsJsonObject().get("original_language").getAsString().toUpperCase();
 			title3 = title;
 
@@ -113,7 +116,14 @@ public class ApiParser {
 			int year = Integer.parseInt(releaseYear);
 			ApiParser.addYears(publishYearRepo, year);
 			
-			movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), link, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
+			boolean duplicateFound = ApiParser.checkDuplicate(movieRepo, tmdbId);
+	
+			if (duplicateFound == false) {
+			movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
+			}
+			else {
+				return "1";
+			}
 
 		} catch (Exception e) {
 			System.out.println(e.toString());
