@@ -50,15 +50,15 @@ public class PublishYearController {
 			System.out.println(e.toString());
 		}
 		return "redirect:/genres";
-	}
+	}*/
 	
 	// Delete genre
-	@GetMapping("/deletegenre/{id}")
+	@GetMapping("/deleteyear/{id}")
 	public String deleteGenre(@PathVariable("id") Long id, Model model) {
 		publishYearRepo.deleteById(id);
-		return "redirect:../genres";
+		return "redirect:../publishyears";
 	}
-	
+	/*
 	
 	//REST
 	

@@ -1,11 +1,14 @@
 package favMovies.domain;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class ApplicationUser {
@@ -20,6 +23,10 @@ public class ApplicationUser {
 	private String username;
 	@Column(name = "password", nullable = false)
 	private String passwordHash;
+	
+
+    @ManyToMany
+    Set<Movie> likedMovies;
 
 	public ApplicationUser(String firstName, String lastName, String role, String username, String passwordHash) {
 		super();
