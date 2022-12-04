@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,14 +55,20 @@ public class FavMoviesApplication {
 			
 			Movie movie1 = new Movie("Jaakon elokuva", "Olli Ohjaaja", publishYearRepo.findById(12), 7555, languageRepo.findById(90), genreRepo.findById(73));
 			Movie movie2 = new Movie("Jonnan elokuva", "Olli Ohjaaja", publishYearRepo.findById(17), 15, languageRepo.findById(167), genreRepo.findById(79));
+			List<Movie> movielist = new ArrayList<>();
+			movielist.add(movie2);
 			ApplicationUser user1 = applicationUserRepo.save(new ApplicationUser("Jaakko", "Pavunvarsi", "USER", "Jaakko91", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
 			ApplicationUser user2 = applicationUserRepo.save(new ApplicationUser("Jonna", "Pajunvarsi", "ADMIN", "Jonna92", "$2a$10$lYT2Sth210v1rmHp2L/cQ.iQUmjJHWlZddVTanmFyrZ83iqqYoO4K"));
-			user1.getLikedMovies().add(movie1);
-			user2.getLikedMovies().add(movie2);
+			System.out.println("TÄMÄ ON STARTISTA " + movie1);
 			applicationUserRepo.save(user1);
 			applicationUserRepo.save(user2);
-			System.out.println(user1);
-			System.out.println(user2);
+			//user1.setLikedMovies(movielist);
+			//user1.getLikedMovies().add(movie1);
+			//user2.getLikedMovies().add(movie2);
+			
+
+			System.out.println("TÄMÄ ON STARTISTA " + user1);
+			System.out.println("TÄMÄ ON STARTISTA " + user2);
 
 			
 			//movie1.getApplicationUsers().add(user);

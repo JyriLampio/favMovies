@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -172,7 +173,9 @@ public class MovieController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/save")
 	public String saveMovie(Model model, @RequestParam int movieId, RedirectAttributes redirectAttributes) throws IOException {
-		String title = apiParser.addMovie(movieId);
+		String user = securityController.getUserName();
+		System.out.println(user);
+		String title = apiParser.addMovie(movieId, user);
 		if (title == "0") {
 		     redirectAttributes.addFlashAttribute("error", "Check the movie ID");
 		     return "redirect:add";

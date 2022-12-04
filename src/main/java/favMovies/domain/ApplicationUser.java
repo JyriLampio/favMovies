@@ -48,7 +48,7 @@ public class ApplicationUser {
 		this.passwordHash = passwordHash;
 	}
 
-	public ApplicationUser(String firstName, String lastName, String role, String username, String passwordHash, Set<Movie> likedMovies) {
+	public ApplicationUser(String firstName, String lastName, String role, String username, String passwordHash, List<Movie> likedMovies/*Set<Movie> likedMovies*/) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;

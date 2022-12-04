@@ -107,7 +107,7 @@ public class ApiParser {
 	}
 
 	// Add movie to database with The Movie Database's movie ID.
-	public String addMovie(int movieId) throws IOException {
+	public String addMovie(int movieId, String user) throws IOException {
 		String title3 = "";
 		try {
 			InputStream is = new URL(
@@ -143,8 +143,13 @@ public class ApiParser {
 			boolean duplicateFound = ApiParser.checkDuplicate(movieRepo, tmdbId);
 
 			if (duplicateFound == false) {
-				movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), tmdbId,
-						languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
+				ApplicationUser activeUser = applicationUserRepo.findByUsername(user);
+				System.out.println("TÄMÄ ON APIPARSERISTA" + activeUser);
+				Movie movie = new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId));
+				System.out.println("TÄMÄ ON APIPARSERISTA" + movie);
+				activeUser.getLikedMovies().add(movie);
+				
+				//movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
 			} else {
 				return "1";
 			}
