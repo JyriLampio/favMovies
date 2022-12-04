@@ -1,5 +1,6 @@
 package favMovies.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -44,10 +45,11 @@ public class Movie {
 	@JoinColumn(name = "genreid")
 	private Genre genre;
 	
-    @ManyToMany
-    Set<ApplicationUser> likes;
+    @ManyToMany(mappedBy = "likedMovies")
+    Set<ApplicationUser> likes = new HashSet<ApplicationUser>();
 
 	public Movie() {
+		super();
 	};
 
 	public Movie(String title, String overview, PublishYear publishYear, int tmdbId, Language language,
@@ -59,6 +61,17 @@ public class Movie {
 		this.language = language;
 		this.genre = genre;
 
+	}
+	
+	public Movie(String title, String overview, PublishYear publishYear, int tmdbId, Language language,
+			Genre genre, Set<ApplicationUser> likes) {
+		this.title = title;
+		this.overview = overview;
+		this.publishYear = publishYear;
+		this.tmdbId = tmdbId;
+		this.language = language;
+		this.genre = genre;
+		this.likes = likes;
 	}
 
 	public String getTitle() {
@@ -116,4 +129,13 @@ public class Movie {
 	public void setGenre(Genre genre) {
 			this.genre = genre;
 	}
+	
+
+    public Set<ApplicationUser> getApplicationUsers() {
+        return likes;
+    }
+
+    public void setApplicationUsers (Set<ApplicationUser> set) {
+        this.likes = likes;
+    }
 }
