@@ -165,7 +165,7 @@ public class MovieController {
 	@GetMapping("/add")
 	public String addMovie(Model model) {
 
-		return "errors/addMovieLink";
+		return "addMovieLink";
 	}
 	
 	// Save a new movie.
