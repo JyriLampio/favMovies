@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -17,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -139,11 +143,11 @@ public class MovieController {
 */
 	// Save a new movie.
 	@PostMapping("/saveedit")
-	public String saveMovie(Movie movie) {
+	public String saveMovie(@Valid Movie movie, BindingResult result, Model model) {
 		try {
-			if (movie.getTitle() == null) {
-				System.out.println("Failed, price too small");
-				return "redirect:add";
+			if (result.hasErrors()) {
+				System.out.println(result);
+				return "editMovie";
 			} else {
 				System.out.println(movie.toString());
 				movieRepo.save(movie);
@@ -161,7 +165,7 @@ public class MovieController {
 	@GetMapping("/add")
 	public String addMovie(Model model) {
 
-		return "addMovieLink";
+		return "errors/addMovieLink";
 	}
 	
 	// Save a new movie.

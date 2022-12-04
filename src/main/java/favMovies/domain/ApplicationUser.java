@@ -1,7 +1,9 @@
 package favMovies.domain;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.PreRemove;
 
 @Entity
 public class ApplicationUser {
@@ -31,7 +34,10 @@ public class ApplicationUser {
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "movie_likes", joinColumns = @JoinColumn(name = "applicationUser_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
-	Set<Movie> likedMovies = new HashSet < Movie > ();
+	private List<Movie> likedMovies = new ArrayList<Movie>();
+	//Set<Movie> likedMovies = new HashSet < Movie > ();
+
+	
 
 	public ApplicationUser(String firstName, String lastName, String role, String username, String passwordHash) {
 		super();
@@ -49,7 +55,7 @@ public class ApplicationUser {
 		this.role = role;
 		this.username = username;
 		this.passwordHash = passwordHash;
-		this.likedMovies = likedMovies;
+		this.likedMovies = (List<Movie>) likedMovies;
 	}
 
 	public ApplicationUser() {
@@ -104,14 +110,27 @@ public class ApplicationUser {
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
-	
+	/*
     public Set < Movie > getLikedMovies() {
         return likedMovies;
     }
 
     public void setLikedMovies(Set < Movie > likedMovies) {
         this.likedMovies = likedMovies;
-    }
+    }*/
+	
+	public void setLikedMovies(List<Movie> likedMovies) {
+		this.likedMovies = likedMovies;
+	}
+
+	public List<Movie> getLikedMovies() {
+		return likedMovies;
+	}
+	
+	@PreRemove
+	private void preRemove() {
+		likedMovies.forEach(like -> like.setLikes(null));
+	}
 
 	@Override
 	public String toString() {

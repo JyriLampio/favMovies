@@ -1,6 +1,8 @@
 package favMovies.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PreRemove;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
@@ -46,7 +49,9 @@ public class Movie {
 	private Genre genre;
 	
     @ManyToMany(mappedBy = "likedMovies")
-    Set<ApplicationUser> likes = new HashSet<ApplicationUser>();
+	private List<ApplicationUser> likes = new ArrayList<ApplicationUser>();
+    //Set<ApplicationUser> likes = new HashSet<ApplicationUser>();
+
 
 	public Movie() {
 		super();
@@ -64,7 +69,7 @@ public class Movie {
 	}
 	
 	public Movie(String title, String overview, PublishYear publishYear, int tmdbId, Language language,
-			Genre genre, Set<ApplicationUser> likes) {
+			Genre genre, List<ApplicationUser> likes) {
 		this.title = title;
 		this.overview = overview;
 		this.publishYear = publishYear;
@@ -118,8 +123,16 @@ public class Movie {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public List<ApplicationUser> getLikes() {
+		return likes;
+	}
+
+	public void setLikes(List<ApplicationUser> likes) {
+		this.likes = likes;
 	}
 
 	public Genre getGenre() {
@@ -130,12 +143,17 @@ public class Movie {
 			this.genre = genre;
 	}
 	
-
+	@PreRemove
+	private void preRemove() {
+		likes.forEach(like -> like.setLikedMovies(null));
+	}
+	
+	/*
     public Set<ApplicationUser> getApplicationUsers() {
         return likes;
     }
 
     public void setApplicationUsers (Set<ApplicationUser> set) {
         this.likes = likes;
-    }
+    }*/
 }
