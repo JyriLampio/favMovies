@@ -39,6 +39,7 @@ import favMovies.domain.Movie;
 import favMovies.domain.MovieRepo;
 import favMovies.domain.PublishYear;
 import favMovies.domain.PublishYearRepo;
+import favMovies.web.SecurityController;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -64,7 +65,10 @@ public class MovieController {
 	private PublishYearRepo publishYearRepo;
 	@Autowired
 	private ApplicationUserRepo applicationUserRepo;
-	
+	@Autowired
+	private SecurityController securityController;
+	@Autowired
+	private ApiParser apiParser;
 
 	// Index page
 	@GetMapping("/")
@@ -77,6 +81,9 @@ public class MovieController {
 	public String movieList(Model model) {
 		String subject = "All movies";
 
+		ApplicationUser user = applicationUserRepo.findByUsername(securityController.getUserName());
+		System.out.println(user);
+		model.addAttribute("movies", user.getLikedMovies());
 		model.addAttribute("subject", subject);
 		model.addAttribute("movies", movieRepo.findAll());
 		return "movieList";
@@ -161,7 +168,7 @@ public class MovieController {
 	@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/save")
 	public String saveMovie(Model model, @RequestParam int movieId, RedirectAttributes redirectAttributes) throws IOException {
-		String title = ApiParser.AddMovie(movieRepo, languageRepo, genreRepo, publishYearRepo, movieId);
+		String title = apiParser.addMovie(movieId);
 		if (title == "0") {
 		     redirectAttributes.addFlashAttribute("error", "Check the movie ID");
 		     return "redirect:add";
