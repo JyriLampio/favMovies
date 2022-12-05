@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 
 import java.net.URL;
 import java.net.http.HttpClient.Redirect;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +36,6 @@ public class ApiParser {
 	private PublishYearRepo publishYearRepo;
 	@Autowired
 	private ApplicationUserRepo applicationUserRepo;
-	@Autowired
-	private SecurityController securityController;
 
 	// Adds all genres to database
 	public String addInitialGenres() throws IOException {
@@ -61,7 +61,9 @@ public class ApiParser {
 	}
 
 	public boolean checkDuplicate(int tmdbId) {
+
 		Movie i = movieRepo.findByTmdbId(tmdbId);
+
 		if (i == null) {
 			return false;
 		}
@@ -108,6 +110,7 @@ public class ApiParser {
 
 	// Add movie to database with The Movie Database's movie ID.
 	public String addMovie(int movieId, String user) throws IOException {
+		ApplicationUser activeUser = applicationUserRepo.findByUsername(user);
 		String title3 = "";
 		try {
 			InputStream is = new URL(
@@ -140,24 +143,41 @@ public class ApiParser {
 			int year = Integer.parseInt(releaseYear);
 			addYears(year);
 
+			Movie movie = new Movie(title, overview, publishYearRepo.findByName(year), tmdbId,
+					languageRepo.findByName(language), genreRepo.findBytmdbid(genreId));
+
 			boolean duplicateFound = checkDuplicate(tmdbId);
 
 			if (duplicateFound == false) {
-				ApplicationUser activeUser = applicationUserRepo.findByUsername(user);
-				System.out.println("TÄMÄ ON APIPARSERISTA" + activeUser);
-				Movie movie = new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId));
-				System.out.println("TÄMÄ ON APIPARSERISTA" + movie);
+
+				movieRepo.save(movie);
 				activeUser.getLikedMovies().add(movie);
-				System.out.println("TÄMÄ ON APIPARSERISTA" + activeUser);
 				applicationUserRepo.save(activeUser);
-				//movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
-			} else {
+				return title3;
+
+			}
+			if (duplicateFound == true) {
+				int i = 0;
+				List<Movie> userMovieList = activeUser.getLikedMovies();
+				for (Movie movies : userMovieList) {
+					if (movies.getTmdbId() == tmdbId) {
+						i++;
+						return "1";
+					}
+				}
+				if (i == 0) {
+					activeUser.getLikedMovies().add(movieRepo.findByTmdbId(tmdbId));
+					applicationUserRepo.save(activeUser);
+				}
+			}
+
+			else {
 				return "1";
 			}
 
 		} catch (Exception e) {
 			System.out.println(e.toString());
-			System.out.println('2');
+			System.out.println("Api Parser Error");
 			return "0";
 		}
 		return title3;
