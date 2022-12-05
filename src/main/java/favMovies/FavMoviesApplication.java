@@ -62,13 +62,16 @@ public class FavMoviesApplication {
 			System.out.println("TÄMÄ ON STARTISTA " + movie1);
 			applicationUserRepo.save(user1);
 			applicationUserRepo.save(user2);
-			//user1.setLikedMovies(movielist);
-			//user1.getLikedMovies().add(movie1);
-			//user2.getLikedMovies().add(movie2);
-			
-
 			System.out.println("TÄMÄ ON STARTISTA " + user1);
 			System.out.println("TÄMÄ ON STARTISTA " + user2);
+			//user1.setLikedMovies(movielist);
+			user1.getLikedMovies().add(movie1);
+			user2.getLikedMovies().add(movie2);
+			applicationUserRepo.save(user1);
+			
+
+			System.out.println("TÄMÄ ON STARTISTA leffojen klisäklyksen jälkeen " + user1);
+			System.out.println("TÄMÄ ON STARTISTA leffojen klisäklyksen jälkeen " + user2);
 
 			
 			//movie1.getApplicationUsers().add(user);

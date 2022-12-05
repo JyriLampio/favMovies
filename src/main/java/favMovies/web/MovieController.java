@@ -90,7 +90,7 @@ public class MovieController {
 		System.out.println(user);
 		model.addAttribute("movies", user.getLikedMovies());
 		model.addAttribute("subject", subject);
-		model.addAttribute("movies", movieRepo.findAll());
+		//model.addAttribute("movies", movieRepo.findAll());
 		return "movieList";
 	}
 
@@ -162,7 +162,7 @@ public class MovieController {
 	}
 	
 	// Add new movie.
-	@PreAuthorize("hasAuthority('ADMIN')")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	@GetMapping("/add")
 	public String addMovie(Model model) {
 
@@ -170,7 +170,7 @@ public class MovieController {
 	}
 	
 	// Save a new movie.
-	@PreAuthorize("hasAuthority('ADMIN')")
+	//@PreAuthorize("hasAuthority('ADMIN')")
 	@PostMapping("/save")
 	public String saveMovie(Model model, @RequestParam int movieId, RedirectAttributes redirectAttributes) throws IOException {
 		String user = securityController.getUserName();

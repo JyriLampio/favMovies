@@ -60,7 +60,7 @@ public class ApiParser {
 		return line;
 	}
 
-	public static boolean checkDuplicate(MovieRepo movieRepo, int tmdbId) {
+	public boolean checkDuplicate(int tmdbId) {
 		Movie i = movieRepo.findByTmdbId(tmdbId);
 		if (i == null) {
 			return false;
@@ -140,7 +140,7 @@ public class ApiParser {
 			int year = Integer.parseInt(releaseYear);
 			addYears(year);
 
-			boolean duplicateFound = ApiParser.checkDuplicate(movieRepo, tmdbId);
+			boolean duplicateFound = checkDuplicate(tmdbId);
 
 			if (duplicateFound == false) {
 				ApplicationUser activeUser = applicationUserRepo.findByUsername(user);
@@ -148,7 +148,8 @@ public class ApiParser {
 				Movie movie = new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId));
 				System.out.println("TÄMÄ ON APIPARSERISTA" + movie);
 				activeUser.getLikedMovies().add(movie);
-				
+				System.out.println("TÄMÄ ON APIPARSERISTA" + activeUser);
+				applicationUserRepo.save(activeUser);
 				//movieRepo.save(new Movie(title, overview, publishYearRepo.findByName(year), tmdbId, languageRepo.findByName(language), genreRepo.findBytmdbid(genreId)));
 			} else {
 				return "1";
