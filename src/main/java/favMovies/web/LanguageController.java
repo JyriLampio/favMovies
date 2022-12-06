@@ -51,7 +51,7 @@ public class LanguageController {
 	}
 	
 	// Delete manufacturer in web page
-	@GetMapping("/deletecountry/{id}")
+	@GetMapping("/deletelanguage/{id}")
 	public String deleteCountry(@PathVariable("id") Long id, Model model) {
 		languageRepo.deleteById(id);
 		return "redirect:../languages";

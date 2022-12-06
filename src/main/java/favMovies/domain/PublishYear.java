@@ -53,7 +53,7 @@ public class PublishYear {
 
 	@PreRemove
 	private void preRemove() {
-		movies.forEach(movie -> movie.setGenre(null));
+		movies.forEach(movie -> movie.setPublishYear(null));
 	}
 
 }

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.net.http.HttpClient.Redirect;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -158,7 +159,7 @@ public class ApiParser {
 			}
 			if (duplicateFound == true) {
 				int i = 0;
-				List<Movie> userMovieList = activeUser.getLikedMovies();
+				Set<Movie> userMovieList = activeUser.getLikedMovies();
 				for (Movie movies : userMovieList) {
 					if (movies.getTmdbId() == tmdbId) {
 						i++;

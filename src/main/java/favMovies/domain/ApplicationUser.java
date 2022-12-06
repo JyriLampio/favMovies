@@ -18,9 +18,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.PreRemove;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import favMovies.domain.ApplicationUserRepo;
+import favMovies.web.SecurityController;
+
+@Service
 @Entity
 public class ApplicationUser {
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -32,9 +39,10 @@ public class ApplicationUser {
 	@Column(name = "password", nullable = false)
 	private String passwordHash;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.PERSIST)
 	@JoinTable(name = "movie_likes", joinColumns = @JoinColumn(name = "applicationUser_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
-	private List<Movie> likedMovies = new ArrayList<Movie>();
+	Set<Movie> likedMovies;
+	//private List<Movie> likedMovies = new ArrayList<Movie>();
 	//Set<Movie> likedMovies = new HashSet < Movie > ();
 
 	
@@ -47,16 +55,25 @@ public class ApplicationUser {
 		this.username = username;
 		this.passwordHash = passwordHash;
 	}
-
-	public ApplicationUser(String firstName, String lastName, String role, String username, String passwordHash, List<Movie> likedMovies/*Set<Movie> likedMovies*/) {
+/*
+	public ApplicationUser(String firstName, String lastName, String role, String username, String passwordHash List<Movie> likedMoviesSet<Movie> likedMovies) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.role = role;
 		this.username = username;
 		this.passwordHash = passwordHash;
-		this.likedMovies = (List<Movie>) likedMovies;
-	}
+		//this.likedMovies = (List<Movie>) likedMovies;
+	}*/
+	
+    public void removeMovie(Movie movie, ApplicationUser user, ApplicationUserRepo repo) {
+    	System.out.println("ENNEN LEFFAN POISTOA" + movie);
+    	user.getLikedMovies().remove(movie);
+    	System.out.println("Poiston jälkeeneee" + movie);
+    	movie.getApplicationUsers().remove(this);
+    	System.out.println("Poiston jälkeen" + movie);
+    	repo.save(user);
+    }  
 
 	public ApplicationUser() {
 		super();
@@ -110,28 +127,28 @@ public class ApplicationUser {
 	public void setPasswordHash(String passwordHash) {
 		this.passwordHash = passwordHash;
 	}
-	/*
+	
     public Set < Movie > getLikedMovies() {
         return likedMovies;
     }
 
     public void setLikedMovies(Set < Movie > likedMovies) {
         this.likedMovies = likedMovies;
-    }*/
-	
+    }
+	/*
 	public void setLikedMovies(List<Movie> likedMovies) {
 		this.likedMovies = likedMovies;
 	}
 
 	public List<Movie> getLikedMovies() {
 		return likedMovies;
-	}
+	}*/
 	
-	@PreRemove
+	/*@PreRemove
 	private void preRemove() {
 		likedMovies.forEach(like -> like.setLikes(null));
 	}
-
+*/
 	@Override
 	public String toString() {
 		return "Name " + firstName + " " + lastName + ", username=" + username + " Role: " + role + " Password: " + passwordHash + " Movies: " + likedMovies;

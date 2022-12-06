@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,6 +75,8 @@ public class MovieController {
 	private SecurityController securityController;
 	@Autowired
 	private ApiParser apiParser;
+	@Autowired
+	private ApplicationUser applicationUser;
 
 	// Index page
 	@GetMapping("/")
@@ -209,7 +212,23 @@ public class MovieController {
 		model.addAttribute("subject", subject);
 		return "editMovie";
 	}
-
+	
+	// Delete a movie by id. Return to previous page. Täytä vielä country muutos tähän että countryn poistessa palaa countries sivulle
+	@GetMapping(path = { "/delete/{id}", "/movies/genre/{genre}/delete/{id}", "/{country}/delete/{id}"  })
+	public String deleteMovie(@PathVariable Long id, @PathVariable(required = false) String genre, Model model) {
+		//movieRepo.deleteById(id);
+		String user = securityController.getUserName();
+		Movie movie = movieRepo.findById(id).get();
+		ApplicationUser useri = applicationUserRepo.findByUsername(user);
+    	System.out.println("CONTROLLERISSA " + movie);
+		applicationUser.removeMovie(movie, useri, applicationUserRepo);
+		
+		if (genre != null) {
+			return "redirect:/movies/genre/{genre}";
+		}
+		return "redirect:../movies";
+	}
+/*
 	// Delete a movie by id. Return to previous page. Täytä vielä country muutos tähän että countryn poistessa palaa countries sivulle
 	@GetMapping(path = { "/delete/{id}", "/movies/genre/{genre}/delete/{id}", "/{country}/delete/{id}"  })
 	public String deleteMovie(@PathVariable Long id, @PathVariable(required = false) String genre, Model model) {
@@ -219,7 +238,7 @@ public class MovieController {
 			return "redirect:/movies/genre/{genre}";
 		}
 		return "redirect:../movies";
-	}
+	}*/
 
 
 	// error

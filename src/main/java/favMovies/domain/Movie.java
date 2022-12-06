@@ -49,7 +49,8 @@ public class Movie {
 	private Genre genre;
 	
     @ManyToMany(mappedBy = "likedMovies")
-	private List<ApplicationUser> likes = new ArrayList<ApplicationUser>();
+    Set<ApplicationUser> likes;
+	//private List<ApplicationUser> likes = new ArrayList<ApplicationUser>();
     //Set<ApplicationUser> likes = new HashSet<ApplicationUser>();
 
 
@@ -67,7 +68,7 @@ public class Movie {
 		this.genre = genre;
 
 	}
-	
+	/*
 	public Movie(String title, String overview, PublishYear publishYear, int tmdbId, Language language,
 			Genre genre, List<ApplicationUser> likes) {
 		this.title = title;
@@ -77,7 +78,7 @@ public class Movie {
 		this.language = language;
 		this.genre = genre;
 		this.likes = likes;
-	}
+	}*/
 
 	public String getTitle() {
 		return title;
@@ -126,14 +127,14 @@ public class Movie {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+/*
 	public List<ApplicationUser> getLikes() {
 		return likes;
 	}
 
 	public void setLikes(List<ApplicationUser> likes) {
 		this.likes = likes;
-	}
+	}*/
 
 	public Genre getGenre() {
 		return genre;
@@ -148,12 +149,12 @@ public class Movie {
 		likes.forEach(like -> like.setLikedMovies(null));
 	}
 	
-	/*
+	
     public Set<ApplicationUser> getApplicationUsers() {
         return likes;
     }
 
     public void setApplicationUsers (Set<ApplicationUser> set) {
         this.likes = likes;
-    }*/
+    }
 }
