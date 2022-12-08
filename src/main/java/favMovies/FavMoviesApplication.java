@@ -39,7 +39,7 @@ public class FavMoviesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FavMoviesApplication.class, args);
 	}
-
+/*
 	@Bean
 	public CommandLineRunner movieDemoing(MovieRepo movieRepo, GenreRepo genreRepo, LanguageRepo languageRepo,
 			PublishYearRepo publishYearRepo) {
@@ -56,5 +56,5 @@ public class FavMoviesApplication {
 
 
 		};
-	}
+	}*/
 }
